@@ -6,22 +6,17 @@ import java.util.ResourceBundle;
 
 import cinema.BO.Cinema;
 import cinema.DAO.CinemaDAO;
-import cinema.DAO.FranchiseDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ListeCinemaController extends MenuController implements Initializable {
 
@@ -39,73 +34,51 @@ public class ListeCinemaController extends MenuController implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Récupérer le nom de l'utilisateur pour le menu
+        nameUti = Navigation.getParam("nameUti");
 
         tcDenomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
+        // Remarque : Pour que tcFranchise affiche quelque chose, votre objet Cinema doit avoir un attribut "franchise"
+        // Ou il faut faire une jointure dans votre CinemaDAO.
         tcFranchise.setCellValueFactory(new PropertyValueFactory<>("franchise"));
+
         ObservableList<Cinema> data = getCinema();
         tvCinema.setItems(data);
+
+        // CORRECTION DE L'ANOMALIE : On appelle enfin les méthodes pour créer les boutons dans la table !
+        btnModif();
+        btnSupp();
     }
 
     private ObservableList<Cinema> getCinema() {
-
         CinemaDAO cinemaDAO = new CinemaDAO();
         List<Cinema> mesCinemas = cinemaDAO.findAll();
-        ObservableList<Cinema> list = FXCollections.observableArrayList(mesCinemas);
-        return list;
+        return FXCollections.observableArrayList(mesCinemas);
     }
 
+    @FXML
     public void bRetourClick(ActionEvent actionEvent) {
-        Stage stageP = (Stage) bRetour.getScene().getWindow();
-        stageP.close();
-
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass().getResource("/cinema/views/page_accueil.fxml"));
-            Parent root = fxmlLoader.load();
-
-            AccueilController accueilController = fxmlLoader.getController();
-            accueilController.setName(nameUti);
-            accueilController.setBienvenue();
-
-            // Créer une nouvelle fenêtre (Stage)
-            Stage stage = new Stage();
-            stage.setTitle("Liste franchises");
-            stage.setScene(new Scene(root));
-
-            // Configurer la fenêtre en tant que modal
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Afficher la fenêtre et attendre qu'elle se ferme
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Window currentWindow = bRetour.getScene().getWindow();
+        // Utilisation propre de Navigation vers l'accueil
+        Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", nameUti, currentWindow);
     }
 
     private void btnModif() {
         tcModif.setCellFactory(column -> new TableCell<Cinema, Void>() {
-            private Button btn = new Button("Modifier");
+            private final Button btn = new Button("Modifier");
+
             {
+                // Appliquer le style CSS existant si nécessaire
+                btn.getStyleClass().add("action-button");
+
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
-                    Stage stageP = (Stage) bRetour.getScene().getWindow();
-                    stageP.close();
 
-                    try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(
-                                getClass().getResource("/cinema/views/page_modif_cinema.fxml"));
-                        Parent root = fxmlLoader.load();
+                    // On sauvegarde l'ID du cinéma cliqué pour le passer à ModifierCinemaController
+                    Navigation.setParam("idCinema", cinema.getIdCinema());
 
-                        Stage stage = new Stage();
-                        stage.setTitle("Modification cinema");
-                        stage.setScene(new Scene(root));
-
-                        stage.initModality(Modality.APPLICATION_MODAL);
-
-                        stage.show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Window currentWindow = btn.getScene().getWindow();
+                    Navigation.goTo("/cinema/views/page_modif_cinema.fxml", "nameUti", nameUti, currentWindow);
                 });
             }
 
@@ -119,35 +92,24 @@ public class ListeCinemaController extends MenuController implements Initializab
 
     private void btnSupp() {
         tcSupp.setCellFactory(col -> new TableCell<Cinema, Void>() {
-            private Button btn = new Button("Supprimer");
+            private final Button btn = new Button("Supprimer");
+
             {
+                btn.getStyleClass().add("action-button");
+
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
-                    FranchiseDAO etudiantDAO = new FranchiseDAO();
-                    if (etudiantDAO.getNbFranchiseByIdGerant(cinema.getIdCinema()) >= 1) {
-                        try {
-                            // Charger le fichier FXML
-                            FXMLLoader fxmlLoader = new FXMLLoader(
-                                    getClass().getResource("/cinema/views/popup_cinema.fxml"));
-                            Parent root = fxmlLoader.load();
 
-                            // Créer une nouvelle fenêtre (Stage)
-                            Stage stage = new Stage();
-                            stage.setTitle("Pop-up");
-                            stage.setScene(new Scene(root));
+                    // CORRECTION DE L'ANOMALIE LOGIQUE : On supprime directement le cinéma
+                    // (L'ancien code vérifiait "getNbFranchiseByIdGerant" ce qui n'avait aucun sens ici)
 
-                            // Configurer la fenêtre en tant que modal
-                            stage.initModality(Modality.APPLICATION_MODAL);
+                    CinemaDAO cinemaDAO = new CinemaDAO();
+                    boolean estSupprime = cinemaDAO.delete(cinema);
 
-                            // Afficher la fenêtre et attendre qu'elle se ferme
-                            stage.show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    if (estSupprime) {
+                        tvCinema.getItems().remove(cinema); // Retire la ligne visuellement de la TableView
                     } else {
-                        tvCinema.getItems().remove(cinema);
-                        CinemaDAO cinemaDAO = new CinemaDAO();
-                        cinemaDAO.delete(cinema);
+                        System.out.println("Erreur lors de la suppression du cinéma.");
                     }
                 });
             }
@@ -159,5 +121,4 @@ public class ListeCinemaController extends MenuController implements Initializab
             }
         });
     }
-
 }
