@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.ModifierCinemaController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Fichier">
+                    <items>
+                        <MenuItem fx:id="bAccueil" mnemonicParsing="false" onAction="#bAccueilClick" text="Accueil" />
+                        <MenuItem fx:id="bQuitter" mnemonicParsing="false" onAction="#bQuitterClick" text="Quitter" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Franchises">
+                    <items>
+                        <MenuItem fx:id="bListeFranchise" mnemonicParsing="false" onAction="#bListFranchiseClick" text="Liste des franchises" />
+                        <MenuItem fx:id="bAjouterFranchise" mnemonicParsing="false" onAction="#bAjouterFranchiseClick" text="Ajouter une franchise" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Cinémas">
+                    <items>
+                        <MenuItem fx:id="bListeCinema" mnemonicParsing="false" onAction="#bListeCinemaClick" text="Liste des cinémas" />
+                        <MenuItem fx:id="bAjouterCinema" mnemonicParsing="false" onAction="#bAjouterCinemaClick" text="Ajouter un cinéma" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Salles">
+                    <items>
+                        <MenuItem fx:id="bListeSalle" mnemonicParsing="false" onAction="#bListeSalleClick" text="Liste des salles" />
+                        <MenuItem fx:id="bAjouterSalle" mnemonicParsing="false" onAction="#bAjouterSalleClick" text="Ajouter une salle" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label layoutX="179.0" layoutY="41.0" text="Modification du Cinéma" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="120.0" layoutY="116.0" text="Nom (Dénomination) :">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+
+                <TextArea fx:id="taLibSec" layoutX="120.0" layoutY="144.0" prefHeight="106.0" prefWidth="400.0" promptText="Saisissez le nouveau nom du cinéma..." />
+
+                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="289.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #27ae60;" text="Enregistrer" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="bRetour" layoutX="351.0" layoutY="289.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #c0392b;" text="Annuler" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

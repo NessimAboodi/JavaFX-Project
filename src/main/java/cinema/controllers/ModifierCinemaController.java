@@ -15,23 +15,30 @@ import javafx.stage.Window;
 public class ModifierCinemaController extends MenuController implements Initializable {
 
     @FXML
-    private TextArea taLibSec; // On garde le même nom si votre FXML utilise encore ce fx:id
+    private TextArea taLibSec; // Champ de texte pour la dénomination du cinéma
 
-    private int idSec; // Identifiant du cinéma en cours de modification
+    private int idSec; // Identifiant du cinéma à modifier
 
     @FXML
     private Button bRetour, bEnregistrer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Le nom de l'utilisateur peut être récupéré via la Navigation si besoin
+        // 1. Récupération du nom de l'utilisateur pour le menu
         nameUti = Navigation.getParam("nameUti");
+
+        // 2. RÉCUPÉRATION DE L'ID : On récupère l'ID passé par ListeCinemaController
+        Object param = Navigation.getParam("idCinema");
+        if (param != null) {
+            this.idSec = (Integer) param;
+            // 3. CHARGEMENT : On remplit le champ de texte avec le nom actuel du cinéma
+            setAttrinuts();
+        }
     }
 
-    public void setIdSec(int idSec) {
-        this.idSec = idSec;
-    }
-
+    /**
+     * Charge les données du cinéma depuis la base de données pour les afficher
+     */
     public void setAttrinuts() {
         CinemaDAO cinemaDAO = new CinemaDAO();
         Cinema cinema = cinemaDAO.find(idSec);
@@ -43,7 +50,7 @@ public class ModifierCinemaController extends MenuController implements Initiali
     @FXML
     private void bRetourClick(ActionEvent event) {
         Window currentWindow = bRetour.getScene().getWindow();
-        // Utilisation de Navigation au lieu de FXMLLoader
+        // Retour à la liste via la classe Navigation
         Navigation.goTo("/cinema/views/page_liste_cinema.fxml", "nameUti", nameUti, currentWindow);
     }
 
@@ -54,11 +61,11 @@ public class ModifierCinemaController extends MenuController implements Initiali
         if (!denomination.trim().isEmpty()) {
             CinemaDAO cinemaDAO = new CinemaDAO();
 
-            // 1. CORRECTION MAJEURE : On récupère l'ancien cinéma pour ne pas perdre ses données
+            // 1. PROTECTION DES DONNÉES : On récupère l'objet complet pour ne pas perdre l'adresse et la ville
             Cinema cinemaExistant = cinemaDAO.find(idSec);
 
             if (cinemaExistant != null) {
-                // 2. On instancie l'objet correctement en conservant l'adresse, la ville et la franchise d'origine
+                // 2. INSTANCIATION CORRECTE : On modifie uniquement la dénomination
                 Cinema cinemaModifie = new Cinema(
                         idSec,
                         denomination,
@@ -67,7 +74,7 @@ public class ModifierCinemaController extends MenuController implements Initiali
                         cinemaExistant.getIdFranchise()
                 );
 
-                // 3. Mise à jour dans la base
+                // 3. MISE À JOUR : Persistence dans la base PostgreSQL
                 boolean controle = cinemaDAO.update(cinemaModifie);
 
                 if (controle) {
@@ -76,9 +83,8 @@ public class ModifierCinemaController extends MenuController implements Initiali
                 }
             }
         } else {
-            // Suppression de l'appel absurde à "popup_ajout_etu.fxml"
+            // Remplacement de l'ancien code d'école par un message d'erreur console
             System.out.println("Erreur : Le champ de dénomination ne peut pas être vide.");
-            // Optionnel : vous pouvez afficher un vrai message d'erreur à l'utilisateur ici
         }
     }
 }
