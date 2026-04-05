@@ -86,7 +86,13 @@ public class AjouterFranchiseController extends MenuController implements Initia
         String x = tfNomFranchise.getText();
         String y = tfSiegeSocial.getText();
 
-        int z = 1;
+        Utilisateur gerantSelectionne = lvGerantFranchise.getSelectionModel().getSelectedItem();
+        if (gerantSelectionne == null) {
+            // Aucun gérant sélectionné = stop
+            return;
+        }
+
+        int z = gerantSelectionne.getIdUtilisateur(); // id vient de la sélection
         Franchise bloup = new Franchise(0, x, y, z);
 
         FranchiseDAO franchiseDAO = new FranchiseDAO();
