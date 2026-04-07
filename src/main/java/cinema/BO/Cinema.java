@@ -1,7 +1,6 @@
 package cinema.BO;
 
 public class Cinema {
-
     private int idCinema;
     private String denomination;
     private String adresse;
@@ -18,6 +17,10 @@ public class Cinema {
 
     public int getIdCinema() {
         return idCinema;
+    }
+
+    public void setIdCinema(int idCinema) {
+        this.idCinema = idCinema;
     }
 
     public String getDenomination() {
@@ -52,4 +55,9 @@ public class Cinema {
         this.idFranchise = idFranchise;
     }
 
+    // CORRECTION : Ajout du toString() pour afficher proprement le nom du cinéma
+    @Override
+    public String toString() {
+        return this.denomination;
+    }
 }

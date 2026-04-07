@@ -1,114 +1,50 @@
 package cinema.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import cinema.BO.Utilisateur;
 import cinema.DAO.UtilisateurDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
-public class ConnexionController implements Initializable {
+public class ConnexionController {
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    @FXML
-    private TextField tfLogin;
-    @FXML
-    private PasswordField tfMDP;
     @FXML
     private Button bConnexion;
 
     @FXML
-    public void bConnexionClick(ActionEvent event) {
-        String login  = tfLogin.getText();
-        String MotDePasse = tfMDP.getText();
-
-        UtilisateurDAO userDAO = new UtilisateurDAO();
-        Utilisateur user = userDAO.authenticate(login, MotDePasse);
-
-        if (user != null) {
-            showAccueil(user.getLogin());
-        } else {
-            showError();
-        }
-    }
-
-    private void showAccueil(String name) {
-        Stage stageP = (Stage) bConnexion.getScene().getWindow();
-        // on ferme l'écran
-        stageP.close();
-        try {
-
-            // Charger le fichier FXML pour la pop-up
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass().getResource("/cinema/views/page_accueil.fxml"));
-            Parent root = fxmlLoader.load();
-
-            // Obtenir le contrôleur de la nouvelle fenetre
-            AccueilController accueilController = fxmlLoader.getController();
-            accueilController.setName(name);
-            accueilController.setBienvenue();
-
-            // Créer une nouvelle fenêtre (Stage)
-            Stage stage = new Stage();
-            stage.setTitle("Accueil Gestion de franchises");
-            stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image("/cinema/images/cinema_32x32.png"));
-            // Configurer la fenêtre en tant que modal
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Afficher la fenêtre et attendre qu'elle se ferme
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+    private PasswordField pfMdp;
 
     @FXML
-    private void showError() {
+    private TextField tfLogin;
 
-        try {
-            // Charger le fichier FXML pour la pop-up
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass().getResource("/cinema/views/ErreurConnexion.fxml"));
-            Parent root = fxmlLoader.load();
+    @FXML
+    private Label lError;
 
-            // Obtenir le contrôleur de la pop-up
-            ErrorController errorController = fxmlLoader.getController();
+    @FXML
+    void bConnexionClick(ActionEvent event) {
+        UtilisateurDAO dao = new UtilisateurDAO();
+        // On tente de récupérer l'utilisateur avec les identifiants saisis
+        Utilisateur user = dao.authenticate(tfLogin.getText(), pfMdp.getText());
 
-            // Passer la variable au contrôleur de la pop-up
-            // errorController.setMajLabel(Integer.toString(compteur));
-
-            // Créer une nouvelle fenêtre (Stage)
-            Stage stage = new Stage();
-            stage.setTitle("Error Window");
-            stage.setScene(new Scene(root));
-
-            // Configurer la fenêtre en tant que modal
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Afficher la fenêtre et attendre qu'elle se ferme
-            stage.showAndWait();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // CORRECTION MAJEURE : On vérifie que l'utilisateur n'est pas null avant de l'utiliser
+        if (user != null) {
+            Window currentWindow = bConnexion.getScene().getWindow();
+            // Si la connexion réussit, on va vers l'accueil
+            Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", user.getLogin(), currentWindow);
+        } else {
+            // Si le mot de passe ou le login est faux, on affiche l'erreur sans crasher
+            showError("Identifiant ou mot de passe incorrect.");
         }
     }
 
+    // Méthode pour afficher le message d'erreur en rouge
+    private void showError(String msg) {
+        lError.setText(msg);
+        lError.setStyle("-fx-text-fill: red;");
+        lError.setVisible(true);
+    }
 }
