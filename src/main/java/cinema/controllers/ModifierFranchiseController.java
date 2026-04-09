@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ModifierFranchiseController extends MenuController implements Initializable {
 
@@ -71,34 +72,8 @@ public class ModifierFranchiseController extends MenuController implements Initi
             FranchiseDAO franchiseDAO = new FranchiseDAO();
             boolean controle = franchiseDAO.update(newFranchise);
             if (controle) {
-                Stage stageP = (Stage) bRetour.getScene().getWindow();
-                stageP.close();
-
-                try {
-
-                    // Charger le fichier FXML
-                    FXMLLoader fxmlLoader = new FXMLLoader(
-                            getClass().getResource("/cinema/views/page_liste_franchise.fxml"));
-                    Parent root = fxmlLoader.load();
-
-                    // Obtenir le contrôleur de la nouvelle fenetre
-                    ListeFranchiseController listeFranchiseController = fxmlLoader.getController();
-                    listeFranchiseController.setName(nameUti);
-
-                    // Créer une nouvelle fenêtre (Stage)
-                    Stage stage = new Stage();
-                    stage.setTitle("Liste franchises");
-                    stage.setScene(new Scene(root));
-
-                    // Configurer la fenêtre en tant que modal
-                    stage.initModality(Modality.APPLICATION_MODAL);
-
-                    // Afficher la fenêtre et attendre qu'elle se ferme
-                    stage.show();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Window currentWindow = bRetour.getScene().getWindow();
+                Navigation.goTo("/cinema/views/page_liste_franchise.fxml", "nameUti", nameUti, currentWindow);
             }
         } else {
             try {
@@ -126,8 +101,8 @@ public class ModifierFranchiseController extends MenuController implements Initi
 
     @FXML
     private void bRetourClick(ActionEvent event) {
-        Stage stageP = (Stage) bRetour.getScene().getWindow();
-        stageP.close();
+        Window currentWindow = bRetour.getScene().getWindow();
+        Navigation.goTo("/cinema/views/page_liste_franchise.fxml", "nameUti", nameUti, currentWindow);
 
         try {
 
