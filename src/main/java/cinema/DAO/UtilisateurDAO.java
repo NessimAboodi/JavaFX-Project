@@ -14,9 +14,9 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
     @Override
     public boolean create(Utilisateur obj) {
         boolean result = false;
-        try {
-            String sql = "INSERT INTO utilisateur(login, mdp) VALUES(?,?)";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "INSERT INTO utilisateur(login, mdp) VALUES(?,?)";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, obj.getLogin());
             ps.setString(2, obj.getMdp());
             int rowsInserted = ps.executeUpdate();
@@ -32,9 +32,9 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
     @Override
     public boolean delete(Utilisateur obj) {
         boolean result = false;
-        try {
-            String sql = "DELETE FROM utilisateur WHERE id_utilisateur = ?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "DELETE FROM utilisateur WHERE id_utilisateur = ?";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setInt(1, obj.getIdUtilisateur());
 
             int rowsDeleted = ps.executeUpdate();
@@ -50,9 +50,9 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
     @Override
     public boolean update(Utilisateur obj) {
         boolean result = false;
-        try {
-            String sql = "UPDATE Utilisateur SET login=?, mdp=? WHERE id_utilisateur = ?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "UPDATE Utilisateur SET login=?, mdp=? WHERE id_utilisateur = ?";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, obj.getLogin());
             ps.setString(2, obj.getMdp());
             ps.setInt(3, obj.getIdUtilisateur());
@@ -77,14 +77,13 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
     @Override
     public List<Utilisateur> findAll() {
         List<Utilisateur> mesUtilisateurs = new ArrayList<>();
-        Utilisateur utilisateur;
-        try {
-            String sql = "SELECT * FROM utilisateur";
-            Statement statement = this.connect.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
+        String sql = "SELECT * FROM utilisateur";
+
+        try (Statement statement = this.connect.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
+
             while (rs.next()) {
-                utilisateur = hydrate(rs);
-                mesUtilisateurs.add(utilisateur);
+                mesUtilisateurs.add(hydrate(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,18 +93,16 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
     @Override
     public Utilisateur find(int idUtilisateur) {
-        Utilisateur user;
-        try {
-            String sql = "SELECT * FROM utilisateur WHERE id_utilisateur = ?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
-            ps.setInt(1, idUtilisateur);
-            ResultSet result = ps.executeQuery();
-            if (result.next()) {
-                user = hydrate(result);
-            } else {
-                user = null;
-            }
+        Utilisateur user = null;
+        String sql = "SELECT * FROM utilisateur WHERE id_utilisateur = ?";
 
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
+            ps.setInt(1, idUtilisateur);
+            try (ResultSet result = ps.executeQuery()) {
+                if (result.next()) {
+                    user = hydrate(result);
+                }
+            }
         } catch (SQLException e) {
             return null;
         }
@@ -114,14 +111,15 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
     public Utilisateur authenticate(String login, String password) {
         Utilisateur user = null;
-        try {
-            String sql = "SELECT * FROM utilisateur WHERE login =? AND mdp=?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "SELECT * FROM utilisateur WHERE login =? AND mdp=?";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, login);
             ps.setString(2, password);
-            ResultSet result = ps.executeQuery();
-            if (result.next()) {
-                user = hydrate(result);
+            try (ResultSet result = ps.executeQuery()) {
+                if (result.next()) {
+                    user = hydrate(result);
+                }
             }
         } catch (SQLException e) {
             return null;

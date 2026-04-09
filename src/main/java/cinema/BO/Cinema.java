@@ -1,7 +1,6 @@
 package cinema.BO;
 
 public class Cinema {
-
     private int idCinema;
     private String denomination;
     private String adresse;
@@ -16,40 +15,29 @@ public class Cinema {
         this.idFranchise = idFranchise;
     }
 
-    public int getIdCinema() {
-        return idCinema;
-    }
+    // Getters et Setters
+    public int getIdCinema() { return idCinema; }
+    public void setIdCinema(int idCinema) { this.idCinema = idCinema; }
 
-    public String getDenomination() {
-        return denomination;
-    }
+    public String getDenomination() { return denomination; }
+    public void setDenomination(String denomination) { this.denomination = denomination; }
 
-    public void setDenomination(String denomination) {
-        this.denomination = denomination;
-    }
+    public String getAdresse() { return adresse; }
+    public void setAdresse(String adresse) { this.adresse = adresse; }
 
-    public String getAdresse() {
-        return adresse;
-    }
+    public String getVille() { return ville; }
+    public void setVille(String ville) { this.ville = ville; }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
+    public int getIdFranchise() { return idFranchise; }
+    public void setIdFranchise(int idFranchise) { this.idFranchise = idFranchise; }
 
-    public String getVille() {
-        return ville;
+    /**
+     * CORRECTION : Redéfinition de toString()
+     * Indispensable pour l'affichage dans les interfaces JavaFX (ListView, TableView, ComboBox)
+     */
+    @Override
+    public String toString() {
+        // On renvoie le nom du cinéma pour qu'il soit lisible dans les listes
+        return this.denomination;
     }
-
-    public void setVille(String ville) {
-        this.ville = ville;
-    }
-
-    public int getIdFranchise() {
-        return idFranchise;
-    }
-
-    public void setIdFranchise(int idFranchise) {
-        this.idFranchise = idFranchise;
-    }
-
 }

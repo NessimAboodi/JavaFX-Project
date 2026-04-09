@@ -14,9 +14,9 @@ public class FranchiseDAO extends DAO<Franchise> {
     @Override
     public boolean create(Franchise obj) {
         boolean controle = false;
-        try {
-            String a = "INSERT INTO franchise(nom_franchise, siege_social, id_gerant) values (?,?,?,?);";
-            PreparedStatement statement = this.connect.prepareStatement(a);
+        String a = "INSERT INTO franchise(nom_franchise, siege_social, id_gerant) values (?,?,?,?);";
+
+        try (PreparedStatement statement = this.connect.prepareStatement(a)) {
             statement.setString(1, obj.getNomFranchise());
             statement.setString(2, obj.getSiegeSocial());
             statement.setInt(3, obj.getIdGerant());
@@ -34,13 +34,14 @@ public class FranchiseDAO extends DAO<Franchise> {
 
     public Integer getNbFranchiseByIdGerant(int idGerant) {
         int result = 0;
-        try {
-            String sql = "SELECT COUNT(*) FROM franchise WHERE id_gerant = ?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "SELECT COUNT(*) FROM franchise WHERE id_gerant = ?";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setInt(1, idGerant);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                result = rs.getInt(1);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,9 +52,9 @@ public class FranchiseDAO extends DAO<Franchise> {
     @Override
     public boolean delete(Franchise obj) {
         boolean controle = false;
-        try {
-            String sql = "DELETE FROM franchise WHERE id_franchise = ?;";
-            PreparedStatement statement = this.connect.prepareStatement(sql);
+        String sql = "DELETE FROM franchise WHERE id_franchise = ?;";
+
+        try (PreparedStatement statement = this.connect.prepareStatement(sql)) {
             statement.setInt(1, obj.getIdFranchise());
 
             int rowsDeleted = statement.executeUpdate();
@@ -70,9 +71,9 @@ public class FranchiseDAO extends DAO<Franchise> {
     @Override
     public boolean update(Franchise obj) {
         boolean controle = false;
-        try {
-            String query = "UPDATE franchise SET nom_franchise = ?, siege_social = ?, id_gerant = ? WHERE id_franchise = ?";
-            PreparedStatement statement = this.connect.prepareStatement(query);
+        String query = "UPDATE franchise SET nom_franchise = ?, siege_social = ?, id_gerant = ? WHERE id_franchise = ?";
+
+        try (PreparedStatement statement = this.connect.prepareStatement(query)) {
             statement.setString(1, obj.getNomFranchise());
             statement.setString(2, obj.getSiegeSocial());
             statement.setInt(3, obj.getIdGerant());
@@ -93,12 +94,13 @@ public class FranchiseDAO extends DAO<Franchise> {
     public Franchise find(int id) {
         Franchise franchise = null;
         String query = "SELECT * FROM franchise WHERE id_franchise = ?;";
-        try {
-            PreparedStatement ps = this.connect.prepareStatement(query);
+
+        try (PreparedStatement ps = this.connect.prepareStatement(query)) {
             ps.setInt(1, id);
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) {
-                franchise = hydrate(resultSet);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    franchise = hydrate(resultSet);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,15 +111,14 @@ public class FranchiseDAO extends DAO<Franchise> {
     @Override
     public List<Franchise> findAll() {
         List<Franchise> mesFranchises = new ArrayList<>();
-        Franchise franchise;
+        String b = "SELECT * FROM franchise ORDER BY id_franchise";
 
-        try {
-            String b = "SELECT * FROM franchise ORDER BY id_franchise";
-            Statement ps = this.connect.createStatement();
-            ResultSet rs = ps.executeQuery(b);
+        // try-with-resources pour le Statement ET le ResultSet
+        try (Statement ps = this.connect.createStatement();
+             ResultSet rs = ps.executeQuery(b)) {
+
             while (rs.next()) {
-                franchise = hydrate(rs);
-                mesFranchises.add(franchise);
+                mesFranchises.add(hydrate(rs));
             }
 
         } catch (SQLException e) {
@@ -128,15 +129,14 @@ public class FranchiseDAO extends DAO<Franchise> {
 
     public List<Franchise> getAllByGerant(int idSection) {
         List<Franchise> mesFranchises = new ArrayList<>();
-        Franchise franchise;
-        try {
-            String sql = "SELECT * FROM franchise WHERE id_gerant = ?";
-            PreparedStatement ps = this.connect.prepareStatement(sql);
+        String sql = "SELECT * FROM franchise WHERE id_gerant = ?";
+
+        try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setInt(1, idSection);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                franchise = hydrate(rs);
-                mesFranchises.add(franchise);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    mesFranchises.add(hydrate(rs));
+                }
             }
         } catch (SQLException e) {
             return null;
