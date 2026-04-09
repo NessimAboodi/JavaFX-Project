@@ -13,9 +13,10 @@ public class CinemaDAO extends DAO<Cinema> {
     @Override
     public boolean create(Cinema obj) {
         boolean result = false;
-        try {
-            String query = "INSERT INTO cinema (denomination, adresse, ville, id_franchise) VALUES (?,?,?,?);";
-            PreparedStatement preparedStatement = this.connect.prepareStatement(query);
+        String query = "INSERT INTO cinema (denomination, adresse, ville, id_franchise) VALUES (?,?,?,?);";
+
+        // CORRECTION : try-with-resources sur le PreparedStatement
+        try (PreparedStatement preparedStatement = this.connect.prepareStatement(query)) {
             preparedStatement.setString(1, obj.getDenomination());
             preparedStatement.setString(2, obj.getAdresse());
             preparedStatement.setString(3, obj.getVille());
@@ -49,8 +50,9 @@ public class CinemaDAO extends DAO<Cinema> {
     public boolean update(Cinema obj) {
         boolean result = false;
         String query = "UPDATE cinema SET denomination = ?, adresse = ?, ville = ?, id_franchise = ? WHERE id_cinema = ?;";
-        try {
-            PreparedStatement preparedStatement = this.connect.prepareStatement(query);
+
+        // CORRECTION : try-with-resources
+        try (PreparedStatement preparedStatement = this.connect.prepareStatement(query)) {
             preparedStatement.setString(1, obj.getDenomination());
             preparedStatement.setString(2, obj.getAdresse());
             preparedStatement.setString(3, obj.getVille());
@@ -70,17 +72,20 @@ public class CinemaDAO extends DAO<Cinema> {
     public Cinema find(int id) {
         Cinema cinema = null;
         String query = "SELECT * FROM cinema WHERE id_cinema = ?;";
-        try {
-            PreparedStatement preparedStatement = this.connect.prepareStatement(query);
+
+        // CORRECTION : double try-with-resources pour ResultSet et PreparedStatement
+        try (PreparedStatement preparedStatement = this.connect.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                cinema = new Cinema(
-                        resultSet.getInt("id_cinema"),
-                        resultSet.getString("denomination"),
-                        resultSet.getString("adresse"),
-                        resultSet.getString("ville"),
-                        resultSet.getInt("id_franchise"));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    cinema = new Cinema(
+                            resultSet.getInt("id_cinema"),
+                            resultSet.getString("denomination"),
+                            resultSet.getString("adresse"),
+                            resultSet.getString("ville"),
+                            resultSet.getInt("id_franchise"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,7 +99,7 @@ public class CinemaDAO extends DAO<Cinema> {
         String query = "SELECT * FROM cinema;";
 
         try (PreparedStatement preparedStatement = this.connect.prepareStatement(query);
-                ResultSet resultSet = preparedStatement.executeQuery()) {
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 Cinema cinema = new Cinema(
@@ -111,5 +116,4 @@ public class CinemaDAO extends DAO<Cinema> {
 
         return cinemas;
     }
-
 }

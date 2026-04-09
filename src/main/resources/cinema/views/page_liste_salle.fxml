@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.ListeSalleController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Fichier">
+                    <items>
+                        <MenuItem fx:id="bAccueil" mnemonicParsing="false" onAction="#bAccueilClick" text="Accueil" />
+                        <MenuItem fx:id="bQuitter" mnemonicParsing="false" onAction="#bQuitterClick" text="Quitter" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Franchises">
+                    <items>
+                        <MenuItem fx:id="bListeFranchise" mnemonicParsing="false" onAction="#bListFranchiseClick" text="Liste des franchises" />
+                        <MenuItem fx:id="bAjouterFranchise" mnemonicParsing="false" onAction="#bAjouterFranchiseClick" text="Ajouter une franchise" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Cinémas">
+                    <items>
+                        <MenuItem fx:id="bListeCinema" mnemonicParsing="false" onAction="#bListeCinemaClick" text="Liste des cinémas" />
+                        <MenuItem fx:id="bAjouterCinema" mnemonicParsing="false" onAction="#bAjouterCinemaClick" text="Ajouter un cinéma" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Salles">
+                    <items>
+                        <MenuItem fx:id="bListeSalle" mnemonicParsing="false" onAction="#bListeSalleClick" text="Liste des salles" />
+                        <MenuItem fx:id="bAjouterSalle" mnemonicParsing="false" onAction="#bAjouterSalleClick" text="Ajouter une salle" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane VBox.vgrow="ALWAYS">
+            <children>
+                <Label layoutX="50.0" layoutY="30.0" text="Liste des Salles" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+
+                <TableView fx:id="tvSalle" layoutX="50.0" layoutY="80.0" prefHeight="300.0" prefWidth="650.0">
+                    <columns>
+                        <TableColumn fx:id="tcNumero" prefWidth="150.0" text="Numéro / Nom" />
+                        <TableColumn fx:id="tcCapacite" prefWidth="150.0" text="Capacité" />
+                        <TableColumn fx:id="tcCinema" prefWidth="200.0" text="Cinéma" />
+                        <TableColumn fx:id="tcModif" prefWidth="75.0" text="Modifier" />
+                        <TableColumn fx:id="tcSupp" prefWidth="75.0" text="Supprimer" />
+                    </columns>
+                </TableView>
+
+                <Button fx:id="bAjouter" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#bAjouterClick" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #3498db;" text="Ajouter une salle" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

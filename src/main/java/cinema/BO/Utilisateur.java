@@ -1,21 +1,25 @@
 package cinema.BO;
 
 public class Utilisateur {
-
     private int idUtilisateur;
     private String nom;
     private String prenom;
     private String login;
     private String mdp;
 
-    public Utilisateur() {
-    }
-
     public Utilisateur(int idUtilisateur, String nom, String prenom, String login, String mdp) {
+        this.idUtilisateur = idUtilisateur;
         this.nom = nom;
         this.prenom = prenom;
-        this.mdp = mdp;
         this.login = login;
+        this.mdp = mdp;
+    }
+
+    public int getIdUtilisateur() {
+        return idUtilisateur;
+    }
+
+    public void setIdUtilisateur(int idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
 
@@ -35,12 +39,12 @@ public class Utilisateur {
         this.prenom = prenom;
     }
 
-    public int getIdUtilisateur() {
-        return idUtilisateur;
+    public String getLogin() {
+        return login;
     }
 
-    public void setIdUtilisateur(int idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getMdp() {
@@ -51,11 +55,9 @@ public class Utilisateur {
         this.mdp = mdp;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    // CORRECTION : Ajout du toString() pour afficher proprement le nom et prénom
+    @Override
+    public String toString() {
+        return this.prenom + " " + this.nom;
     }
 }
