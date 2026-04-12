@@ -50,10 +50,8 @@ public class AjouterFranchiseController extends MenuController implements Initia
 
     @FXML
     public void bRetourClick(ActionEvent event) {
-        // On fait le lien avec l'ecran actuel
         Stage stageP = (Stage) bRetour.getScene().getWindow();
-        // on ferme l'écran
-        stageP.close();
+        Navigation.goTo("/cinema/views/page_liste_franchise.fxml", "nameUti", nameUti, stageP);
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
