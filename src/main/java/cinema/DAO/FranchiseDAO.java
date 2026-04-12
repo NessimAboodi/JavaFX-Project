@@ -14,7 +14,7 @@ public class FranchiseDAO extends DAO<Franchise> {
     @Override
     public boolean create(Franchise obj) {
         boolean controle = false;
-        String a = "INSERT INTO franchise(nom_franchise, siege_social, id_gerant) values (?,?,?,?);";
+        String a = "INSERT INTO franchise(nom_franchise, siege_social, id_gerant) values (?,?,?);";
 
         try (PreparedStatement statement = this.connect.prepareStatement(a)) {
             statement.setString(1, obj.getNomFranchise());
