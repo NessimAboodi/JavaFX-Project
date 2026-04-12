@@ -1,13 +1,14 @@
 package cinema.DAO;
 
+import cinema.BO.Utilisateur;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import cinema.BO.Utilisateur;
 
 public class UtilisateurDAO extends DAO<Utilisateur> {
 
@@ -18,7 +19,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
         try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, obj.getLogin());
-            ps.setString(2, obj.getMdp());
+            ps.setString(2, BCrypt.hashpw(obj.getMdp(), BCrypt.gensalt())); // hachage
             int rowsInserted = ps.executeUpdate();
             if (rowsInserted > 0) {
                 result = true;
@@ -109,16 +110,20 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
         return user;
     }
 
-    public Utilisateur authenticate(String login, String password) {
+    public Utilisateur authenticate(String login, String motDePasse) {
         Utilisateur user = null;
-        String sql = "SELECT * FROM utilisateur WHERE login =? AND mdp=?";
+        // On cherche uniquement par login, le mot de passe se vérifie en Java
+        String sql = "SELECT * FROM utilisateur WHERE login = ?";
 
         try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, login);
-            ps.setString(2, password);
             try (ResultSet result = ps.executeQuery()) {
                 if (result.next()) {
-                    user = hydrate(result);
+                    Utilisateur candidat = hydrate(result);
+                    // BCrypt compare le mot de passe saisi avec le hash stocké
+                    if (BCrypt.checkpw(motDePasse, candidat.getMdp())) {
+                        user = candidat;
+                    }
                 }
             }
         } catch (SQLException e) {

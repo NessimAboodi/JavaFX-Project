@@ -27,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ListeFranchiseController extends MenuController implements Initializable {
     @FXML
@@ -92,8 +93,8 @@ public class ListeFranchiseController extends MenuController implements Initiali
 
     @FXML
     private void bRetourClick() {
-        Stage stageP = (Stage) bRetour.getScene().getWindow();
-        stageP.close();
+        Window currentWindow = bRetour.getScene().getWindow();
+        Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", nameUti, currentWindow);
 
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
