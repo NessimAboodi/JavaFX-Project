@@ -1,3 +1,7 @@
+-- UPDATE utilisateur SET mdp = '$2a$10$24Qm.1nJysKfavFbilRMQOh4/e0Sd3CkS4y3zMNU0FlEZGcQ9Dpri' WHERE login = 'jean.dupont@email.com';
+-- UPDATE utilisateur SET mdp = '$2a$10$5kLv2XE/Wd7ZeunuGXvLzOPwy4eXlPtiB3Ob38Flak1GMZXeDiSKO' WHERE login = 'alice.martin@email.com';
+-- UPDATE utilisateur SET mdp = '$2a$10$WG3zFAJSLPs1D3HM9seWze6ObH2ybwFYjkgkpntqCzeaF1qgdViS6' WHERE login = 'lucas.bernard@email.com';
+
 -- 1. Insertion des Utilisateurs (Gérants potentiels)
 INSERT INTO
 	utilisateur (nom, prenom, login, mdp)
@@ -6,19 +10,19 @@ VALUES
 		'Dupont',
 		'Jean',
 		'jean.dupont@email.com',
-		'jean'
+		'$2a$10$24Qm.1nJysKfavFbilRMQOh4/e0Sd3CkS4y3zMNU0FlEZGcQ9Dpri'
 	),
 	(
 		'Martin',
 		'Alice',
 		'alice.martin@email.com',
-		'alice'
+		'$2a$10$5kLv2XE/Wd7ZeunuGXvLzOPwy4eXlPtiB3Ob38Flak1GMZXeDiSKO'
 	),
 	(
 		'Bernard',
 		'Lucas',
 		'lucas.bernard@email.com',
-		'lucas'
+		'$2a$10$WG3zFAJSLPs1D3HM9seWze6ObH2ybwFYjkgkpntqCzeaF1qgdViS6'
 	);
 
 -- 2. Insertion des Franchises
