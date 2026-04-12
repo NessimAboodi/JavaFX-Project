@@ -24,7 +24,12 @@ public class ListeCinemaController extends MenuController implements Initializab
     private TableView<Cinema> tvCinema;
 
     @FXML
-    private TableColumn<Cinema, String> tcDenomination, tcFranchise;
+    private TableColumn<Cinema, String> tcDenomination;
+
+    // Bien que l'ID soit un entier, on peut laisser le TableColumn en String ou Integer,
+    // JavaFX gérera l'affichage grâce au PropertyValueFactory.
+    @FXML
+    private TableColumn<Cinema, Integer> tcFranchise;
 
     @FXML
     private TableColumn<Cinema, Void> tcModif, tcSupp;
@@ -38,14 +43,14 @@ public class ListeCinemaController extends MenuController implements Initializab
         nameUti = Navigation.getParam("nameUti");
 
         tcDenomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-        // Remarque : Pour que tcFranchise affiche quelque chose, votre objet Cinema doit avoir un attribut "franchise"
-        // Ou il faut faire une jointure dans votre CinemaDAO.
-        tcFranchise.setCellValueFactory(new PropertyValueFactory<>("franchise"));
+
+        // CORRECTION ICI : "idFranchise" correspond exactement à l'attribut dans votre classe Cinema.java
+        tcFranchise.setCellValueFactory(new PropertyValueFactory<>("idFranchise"));
 
         ObservableList<Cinema> data = getCinema();
         tvCinema.setItems(data);
 
-        // CORRECTION DE L'ANOMALIE : On appelle enfin les méthodes pour créer les boutons dans la table !
+        // Appel des méthodes pour créer les boutons dans la table
         btnModif();
         btnSupp();
     }
@@ -100,14 +105,12 @@ public class ListeCinemaController extends MenuController implements Initializab
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
 
-                    // CORRECTION DE L'ANOMALIE LOGIQUE : On supprime directement le cinéma
-                    // (L'ancien code vérifiait "getNbFranchiseByIdGerant" ce qui n'avait aucun sens ici)
-
                     CinemaDAO cinemaDAO = new CinemaDAO();
                     boolean estSupprime = cinemaDAO.delete(cinema);
 
                     if (estSupprime) {
                         tvCinema.getItems().remove(cinema); // Retire la ligne visuellement de la TableView
+                        System.out.println("Cinéma supprimé avec succès.");
                     } else {
                         System.out.println("Erreur lors de la suppression du cinéma.");
                     }
