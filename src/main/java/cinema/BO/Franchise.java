@@ -56,9 +56,9 @@ public class Franchise {
         return siegeSocial;
     }
 
+
     @Override
     public String toString() {
-        return "Franchise [idFranchise=" + idFranchise + ", nomFranchise=" + nomFranchise + ", siegeSocial="
-                + siegeSocial + ", idGerant=" + idGerant + "]";
+        return this.nomFranchise.get();
     }
 }
