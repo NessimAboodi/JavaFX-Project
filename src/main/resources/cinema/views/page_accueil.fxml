@@ -87,7 +87,7 @@
                    controlY="-94.0"
                    endX="683.0"
                    endY="178.0"
-                   fill="#3A3AB6"
+                   fill="#a1e6e2"
                    layoutX="50.0"
                    layoutY="300.0"
                    startX="-328.0"
@@ -101,7 +101,7 @@
                prefHeight="40.0"
                prefWidth="729.0"
                text="BIENVENUE"
-               textFill="#024010">
+               textFill="#000000">
             <font>
                 <Font name="Franklin Gothic Medium" size="40.0" />
             </font>
@@ -111,8 +111,8 @@
                layoutY="219.0"
                prefHeight="40.0"
                prefWidth="729.0"
-               text="dans l'application de gestion de franchises"
-               textFill="#3A3AB6">
+               text="Bienvenue dans l'application de gestion de franchises"
+               textFill="#000000">
             <font>
                 <Font name="Franklin Gothic Medium Cond" size="26.0" />
             </font>

@@ -4,18 +4,70 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.AjouterSalleController">
     <children>
-        <MenuBar VBox.vgrow="NEVER">
-            <menus>
-                <Menu mnemonicParsing="false" text="Navigation">
-                    <items>
-                        <MenuItem fx:id="bAccueil" mnemonicParsing="false" onAction="#bAccueilClick" text="Retour à l'accueil" />
-                        <MenuItem fx:id="bListeSalle" mnemonicParsing="false" onAction="#bListeSalleClick" text="Liste des salles" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+        <VBox layoutX="-1.0" prefHeight="48.0" prefWidth="729.0">
+            <children>
+                <MenuBar layoutY="1.0" prefHeight="26.0" prefWidth="711.0">
+                    <menus>
+                        <Menu fx:id="gestionFranchise" mnemonicParsing="false" text="Gestion franchises">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@../images/franchise_64x64.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <items>
+                                <MenuItem fx:id="bListeFranchise" mnemonicParsing="false" onAction="#bListFranchiseClick" text="Liste franchises" />
+                                <MenuItem fx:id="bAjouterFranchise" mnemonicParsing="false" onAction="#bAjouterFranchiseClick" text="Ajouter une franchise" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="gestionCinema" mnemonicParsing="false" text="Gestion cinémas">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@../images/cinema_32x32.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <items>
+                                <MenuItem fx:id="bListeCinema" mnemonicParsing="false" onAction="#bListeCinemaClick" text="Liste des cinémas" />
+                                <MenuItem fx:id="bAjouterCinema" mnemonicParsing="false" onAction="#bAjouterCinemaClick" text="Ajouter un cinéma" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="gestionSalle" mnemonicParsing="false" text="Gestion salles">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@../images/salle_32x32.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <items>
+                                <MenuItem fx:id="bListeSalle" mnemonicParsing="false" onAction="#bListeSalleClick" text="Liste salles" />
+                                <MenuItem fx:id="bAjouterSalle" mnemonicParsing="false" onAction="#bAjouterSalleClick" text="Ajouter une salle" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="bAutres" mnemonicParsing="false" text="Autres">
+                            <graphic>
+                                <ImageView fitWidth="16" fitHeight="16">
+                                    <image>
+                                        <Image url="@../images/info.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <items>
+                                <MenuItem fx:id="bAccueil" mnemonicParsing="false" onAction="#bAccueilClick" text="Accueil" />
+                                <MenuItem fx:id="bQuitter" mnemonicParsing="false" onAction="#bQuitterClick" text="Quitter" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </VBox>
         <AnchorPane VBox.vgrow="ALWAYS">
             <children>
                 <Label layoutX="179.0" layoutY="41.0" text="Ajouter une Salle" textFill="#2c3e50">
@@ -37,13 +89,13 @@
                     </children>
                 </VBox>
 
-                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="310.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #27ae60;" text="Enregistrer" textFill="WHITE">
+                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="310.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" text="Enregistrer">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
 
-                <Button fx:id="bRetour" layoutX="369.0" layoutY="310.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #c0392b;" text="Annuler" textFill="WHITE">
+                <Button fx:id="bRetour" layoutX="369.0" layoutY="310.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" text="Annuler">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
