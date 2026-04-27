@@ -30,11 +30,11 @@ public class ConnexionController {
         // On tente de récupérer l'utilisateur avec les identifiants saisis
         Utilisateur user = dao.authenticate(tfLogin.getText(), pfMdp.getText());
 
-        // CORRECTION MAJEURE : On vérifie que l'utilisateur n'est pas null avant de l'utiliser
+        // On vérifie que l'utilisateur n'est pas null avant de l'utiliser
         if (user != null) {
             Window currentWindow = bConnexion.getScene().getWindow();
             // Si la connexion réussit, on va vers l'accueil
-            Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", user.getLogin(), currentWindow);
+            Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", user.getNom(), currentWindow);
         } else {
             // Si le mot de passe ou le login est faux, on affiche l'erreur sans crasher
             showError("Identifiant ou mot de passe incorrect.");

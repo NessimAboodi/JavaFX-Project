@@ -120,14 +120,13 @@
             </children>
         </HBox>
 
-      
-        <!-- Bande verte en bas pour harmonisation -->
+        <!-- Bande en bas -->
         <Pane layoutX="0.0" layoutY="439.0" prefHeight="39.0" prefWidth="804.0" />
         <QuadCurve controlX="67.66667938232422"
                    controlY="-217.33334350585938"
                    endX="318.33331298828125"
                    endY="-15.000030517578125"
-                   fill="#3A3AB6"
+                   fill="#a1e6e2"
                    layoutX="-60.0"
                    layoutY="493.0"
                    startX="-152.3333282470703"
@@ -139,7 +138,7 @@
                    controlY="-222.33334350585938"
                    endX="45.00006103515625"
                    endY="-15.0"
-                   fill="#3A3AB6"
+                   fill="#a1e6e2"
                    layoutX="759.0"
                    layoutY="493.0"
                    startX="-220.66668701171875"
@@ -147,5 +146,12 @@
                    stroke="BLACK"
                    strokeType="INSIDE"
                    strokeWidth="0.0" />
+
+        <!-- Logo cinéma -->
+        <ImageView fitHeight="89.0" fitWidth="92.0" layoutX="41.0" layoutY="366.0">
+            <image>
+                <Image url="@../images/cinema_logo.png" />
+            </image>
+        </ImageView>
     </children>
 </Pane>
