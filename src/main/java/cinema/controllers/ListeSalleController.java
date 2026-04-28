@@ -2,10 +2,15 @@ package cinema.controllers;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
+import cinema.BO.Cinema;
 import cinema.BO.Salle;
+import cinema.DAO.CinemaDAO;
 import cinema.DAO.SalleDAO;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,38 +27,37 @@ import javafx.stage.Window;
 
 public class ListeSalleController extends MenuController implements Initializable {
 
-    @FXML
-    private TableView<Salle> tvSalle;
+    @FXML private TableView<Salle> tvSalle;
+    @FXML private TableColumn<Salle, String> tcNumero;
+    @FXML private TableColumn<Salle, Integer> tcCapacite;
 
-    @FXML
-    private TableColumn<Salle, String> tcNumero;
+    // NOUVELLES COLONNES : String au lieu de Integer pour afficher du texte !
+    @FXML private TableColumn<Salle, String> tcDescription;
+    @FXML private TableColumn<Salle, String> tcCinema;
 
-    @FXML
-    private TableColumn<Salle, Integer> tcCapacite;
-
-    @FXML
-    private TableColumn<Salle, Integer> tcCinema;
-
-    @FXML
-    private TableColumn<Salle, Void> tcModif, tcSupp;
-
-    @FXML
-    private Button bRetour;
+    @FXML private TableColumn<Salle, Void> tcModif, tcSupp;
+    @FXML private Button bRetour;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Récupérer le nom de l'utilisateur pour le menu
         nameUti = Navigation.getParam("nameUti");
 
-        // Liaison des colonnes avec les attributs de la classe Salle.java
+        // Récupération des cinémas pour afficher leurs noms
+        CinemaDAO cinemaDAO = new CinemaDAO();
+        Map<Integer, Cinema> cinemas = cinemaDAO.findAll().stream()
+                .collect(Collectors.toMap(Cinema::getIdCinema, c -> c));
+
         tcNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
         tcCapacite.setCellValueFactory(new PropertyValueFactory<>("capacite"));
-        tcCinema.setCellValueFactory(new PropertyValueFactory<>("idCinema"));
+        tcDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        // Charger les données dans le tableau
+        // Liaison de l'ID du cinéma au Nom du cinéma
+        tcCinema.setCellValueFactory(cellData -> {
+            Cinema cinema = cinemas.get(cellData.getValue().getIdCinema());
+            return new SimpleStringProperty(cinema != null ? cinema.getDenomination() : "Inconnu");
+        });
+
         refreshTable();
-
-        // Création des boutons d'action
         btnModif();
         btnSupp();
     }
@@ -74,23 +78,15 @@ public class ListeSalleController extends MenuController implements Initializabl
     private void btnModif() {
         tcModif.setCellFactory(column -> new TableCell<Salle, Void>() {
             private final Button btn = new Button("Modifier");
-
             {
                 btn.getStyleClass().add("action-button");
-
                 btn.setOnAction(event -> {
                     Salle salle = getTableView().getItems().get(getIndex());
-
-                    // ÉTAPE CRUCIALE POUR QUE ÇA MARCHE :
-                    // On transmet l'objet salle au contrôleur de modification
                     ModifierSalleController.salleAModifier = salle;
-
                     Window currentWindow = btn.getScene().getWindow();
-                    // On navigue vers la page de modification
                     Navigation.goTo("/cinema/views/page_modif_salle.fxml", "nameUti", nameUti, currentWindow);
                 });
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -102,27 +98,18 @@ public class ListeSalleController extends MenuController implements Initializabl
     private void btnSupp() {
         tcSupp.setCellFactory(col -> new TableCell<Salle, Void>() {
             private final Button btn = new Button("Supprimer");
-
             {
-
                 btn.setOnAction(event -> {
                     Salle salle = getTableView().getItems().get(getIndex());
-
-                    // Fenêtre de confirmation avant suppression
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer la salle " + salle.getNumero() + " ?", ButtonType.YES, ButtonType.NO);
                     alert.showAndWait();
-
                     if (alert.getResult() == ButtonType.YES) {
-                        SalleDAO salleDAO = new SalleDAO();
-                        boolean estSupprime = salleDAO.delete(salle);
-
-                        if (estSupprime) {
-                            tvSalle.getItems().remove(salle); // Mise à jour visuelle
+                        if (new SalleDAO().delete(salle)) {
+                            tvSalle.getItems().remove(salle);
                         }
                     }
                 });
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);

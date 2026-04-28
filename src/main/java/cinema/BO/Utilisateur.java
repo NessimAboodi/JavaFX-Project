@@ -55,7 +55,7 @@ public class Utilisateur {
         this.mdp = mdp;
     }
 
-    // CORRECTION : Ajout du toString() pour afficher proprement le nom et prénom
+    // CORRECTION : Affichage propre du nom et prénom pour la ComboBox et les listes
     @Override
     public String toString() {
         return this.prenom + " " + this.nom;

@@ -4,20 +4,23 @@ public class Salle {
     private int idSalle;
     private String numero;
     private int capacite;
+    private String description; // NOUVEAU CHAMP
     private int idCinema;
 
-    // Constructeur pour la création (quand on n'a pas encore l'ID de la BDD)
-    public Salle(String numero, int capacite, int idCinema) {
+    // Constructeur pour la création
+    public Salle(String numero, int capacite, String description, int idCinema) {
         this.numero = numero;
         this.capacite = capacite;
+        this.description = description;
         this.idCinema = idCinema;
     }
 
-    // Constructeur complet (utilisé par le DAO lors de la lecture)
-    public Salle(int idSalle, String numero, int capacite, int idCinema) {
+    // Constructeur complet (pour le DAO)
+    public Salle(int idSalle, String numero, int capacite, String description, int idCinema) {
         this.idSalle = idSalle;
         this.numero = numero;
         this.capacite = capacite;
+        this.description = description;
         this.idCinema = idCinema;
     }
 
@@ -30,6 +33,9 @@ public class Salle {
 
     public int getCapacite() { return capacite; }
     public void setCapacite(int capacite) { this.capacite = capacite; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public int getIdCinema() { return idCinema; }
     public void setIdCinema(int idCinema) { this.idCinema = idCinema; }
