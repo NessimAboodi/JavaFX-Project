@@ -38,7 +38,7 @@ public class ListeSalleController extends MenuController implements Initializabl
     private TableColumn<Salle, Void> tcModif, tcSupp;
 
     @FXML
-    private Button bAjouter;
+    private Button bRetour;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,9 +66,9 @@ public class ListeSalleController extends MenuController implements Initializabl
     }
 
     @FXML
-    public void bAjouterClick(ActionEvent actionEvent) {
-        Window currentWindow = bAjouter.getScene().getWindow();
-        Navigation.goTo("/cinema/views/page_ajout_salle.fxml", "nameUti", nameUti, currentWindow);
+    public void bRetourClick(ActionEvent actionEvent) {
+        Window currentWindow = bRetour.getScene().getWindow();
+        Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", nameUti, currentWindow);
     }
 
     private void btnModif() {
@@ -104,7 +104,6 @@ public class ListeSalleController extends MenuController implements Initializabl
             private final Button btn = new Button("Supprimer");
 
             {
-                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;");
 
                 btn.setOnAction(event -> {
                     Salle salle = getTableView().getItems().get(getIndex());
