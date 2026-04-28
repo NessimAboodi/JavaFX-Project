@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.ModifierSalleController">
+<VBox prefHeight="500.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.ModifierSalleController">
     <children>
-        <MenuBar VBox.vgrow="NEVER">
-            <menus>
-                <Menu mnemonicParsing="false" text="Navigation">
-                    <items>
-                        <MenuItem fx:id="bAccueil" mnemonicParsing="false" onAction="#bAccueilClick" text="Retour à l'accueil" />
-                        <MenuItem fx:id="bListeSalle" mnemonicParsing="false" onAction="#bListeSalleClick" text="Liste des salles" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+        <VBox prefHeight="48.0" prefWidth="729.0">
+            <children>
+                <MenuBar prefHeight="26.0" prefWidth="711.0">
+                    <menus>
+                        <Menu text="Gestion franchises">
+                            <items>
+                                <MenuItem onAction="#bListFranchiseClick" text="Liste franchises" />
+                            </items>
+                        </Menu>
+                        <Menu text="Gestion cinémas">
+                            <items>
+                                <MenuItem onAction="#bListeCinemaClick" text="Liste des cinémas" />
+                            </items>
+                        </Menu>
+                        <Menu text="Gestion salles">
+                            <items>
+                                <MenuItem onAction="#bListeSalleClick" text="Liste salles" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </VBox>
         <AnchorPane VBox.vgrow="ALWAYS">
             <children>
                 <Label layoutX="179.0" layoutY="41.0" text="Modifier la Salle" textFill="#2c3e50">
@@ -28,21 +44,24 @@
                         <Label text="Numéro / Nom de la salle :" />
                         <TextField fx:id="tfNumSalle" prefWidth="300.0" />
 
-                        <Label text="Capacité :" />
+                        <Label text="Capacité (nb places) :" />
                         <TextField fx:id="tfCapacite" prefWidth="300.0" />
+
+                        <Label text="Description / Équipement :" />
+                        <TextField fx:id="tfDescription" prefWidth="300.0" promptText="Ex: Dolby Atmos, 4DX..." />
 
                         <Label text="Cinéma rattaché :" />
                         <ComboBox fx:id="cbCinema" prefWidth="300.0" />
                     </children>
                 </VBox>
 
-                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="310.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #f39c12;" text="Mettre à jour" textFill="WHITE">
+                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="380.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" text="Enregistrer">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
 
-                <Button fx:id="bRetour" layoutX="369.0" layoutY="310.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" style="-fx-background-color: #c0392b;" text="Annuler" textFill="WHITE">
+                <Button fx:id="bRetour" layoutX="369.0" layoutY="380.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" text="Annuler">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
