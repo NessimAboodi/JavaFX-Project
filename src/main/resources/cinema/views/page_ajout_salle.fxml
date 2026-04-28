@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.AjouterSalleController">
+
+<VBox prefHeight="500.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cinema.controllers.AjouterSalleController">
     <children>
         <VBox layoutX="-1.0" prefHeight="48.0" prefWidth="729.0">
             <children>
@@ -84,18 +84,21 @@
                         <Label text="Capacité (nombre de sièges) :" />
                         <TextField fx:id="tfCapacite" prefWidth="300.0" promptText="Ex: 150" />
 
+                        <Label text="Description / Équipement :" />
+                        <TextField fx:id="tfDescription" prefWidth="300.0" promptText="Ex: Dolby Surround ATMOS" />
+
                         <Label text="Cinéma rattaché :" />
                         <ComboBox fx:id="cbCinema" prefWidth="300.0" promptText="Sélectionnez un cinéma" />
                     </children>
                 </VBox>
 
-                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="310.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" text="Enregistrer">
+                <Button fx:id="bEnregistrer" layoutX="179.0" layoutY="380.0" mnemonicParsing="false" onAction="#bEnregistrerClick" prefHeight="35.0" prefWidth="110.0" text="Enregistrer">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
 
-                <Button fx:id="bRetour" layoutX="369.0" layoutY="310.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" text="Annuler">
+                <Button fx:id="bRetour" layoutX="369.0" layoutY="380.0" mnemonicParsing="false" onAction="#bRetourClick" prefHeight="35.0" prefWidth="110.0" text="Annuler">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

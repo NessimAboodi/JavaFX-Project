@@ -55,12 +55,6 @@ public class ListeFranchiseController extends MenuController implements Initiali
     public void initialize(URL location, ResourceBundle resources) {
         UtilisateurDAO gerantDAO = new UtilisateurDAO();
 
-        // Programmation fonctionnelle
-        // Collecteur de flux :
-        // https://www.ionos.fr/digitalguide/sites-internet/developpement-web/les-collectors-de-streams-en-java/
-        // toMap :
-        // https://www.geeksforgeeks.org/java/collectors-tomap-method-in-java-with-examples/
-        //
         Map<Integer, Utilisateur> gerants = gerantDAO.findAll()
                 .stream()
                 .collect(Collectors.toMap(Utilisateur::getIdUtilisateur, u -> u));
@@ -105,15 +99,10 @@ public class ListeFranchiseController extends MenuController implements Initiali
             accueilController.setName(nameUti);
             accueilController.setBienvenue();
 
-            // Créer une nouvelle fenêtre (Stage)
             Stage stage = new Stage();
             stage.setTitle("Liste franchises");
             stage.setScene(new Scene(root));
-
-            // Configurer la fenêtre en tant que modal
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Afficher la fenêtre et attendre qu'elle se ferme
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,9 +131,7 @@ public class ListeFranchiseController extends MenuController implements Initiali
                         Stage stage = new Stage();
                         stage.setTitle("Modification franchise");
                         stage.setScene(new Scene(root));
-
                         stage.initModality(Modality.APPLICATION_MODAL);
-
                         stage.show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -171,7 +158,6 @@ public class ListeFranchiseController extends MenuController implements Initiali
                     FranchiseDAO franchiseDAO = new FranchiseDAO();
                     franchiseDAO.delete(franchise);
                 });
-                // btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
             }
 
             @Override
@@ -181,5 +167,4 @@ public class ListeFranchiseController extends MenuController implements Initiali
             }
         });
     }
-
 }

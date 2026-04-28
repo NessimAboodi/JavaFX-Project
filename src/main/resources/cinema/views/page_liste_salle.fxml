@@ -87,15 +87,15 @@
 
         <TableView fx:id="tvSalle" layoutY="50.0" prefHeight="292.0" prefWidth="750.0">
             <columns>
-                <TableColumn fx:id="tcNumero" prefWidth="150.0" text="Numéro / Nom" />
-                <TableColumn fx:id="tcCapacite" prefWidth="150.0" text="Capacité" />
+                <TableColumn fx:id="tcNumero" prefWidth="120.0" text="Numéro / Nom" />
+                <TableColumn fx:id="tcCapacite" prefWidth="100.0" text="Capacité" />
+                <TableColumn fx:id="tcDescription" prefWidth="180.0" text="Description" />
                 <TableColumn fx:id="tcCinema" prefWidth="150.0" text="Cinéma" />
                 <TableColumn fx:id="tcModif" prefWidth="100.0" text="Modifier" />
                 <TableColumn fx:id="tcSupp" prefWidth="100.0" text="Supprimer" />
             </columns>
         </TableView>
 
-        <!-- HBox avec les boutons RETOUR -->
         <HBox alignment="CENTER"
               layoutY="355.0"
               prefHeight="115.0"
@@ -116,7 +116,6 @@
             </children>
         </HBox>
 
-        <!-- Bande en bas -->
         <Pane layoutX="0.0" layoutY="439.0" prefHeight="39.0" prefWidth="750.0" />
         <QuadCurve controlX="67.66667938232422"
                    controlY="-217.33334350585938"
@@ -143,7 +142,6 @@
                    strokeType="INSIDE"
                    strokeWidth="0.0" />
 
-        <!-- Logo cinéma -->
         <ImageView fitHeight="89.0" fitWidth="92.0" layoutX="41.0" layoutY="366.0">
             <image>
                 <Image url="@../images/cinema_logo.png" />
