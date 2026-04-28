@@ -11,19 +11,16 @@ public class SalleDAO extends DAO<Salle> {
 
     @Override
     public boolean create(Salle obj) {
-        // ATTENTION : Vérifiez bien dans pgAdmin si la colonne s'appelle 'numero' ou 'numero_salle'
-        String sql = "INSERT INTO salle (numero, capacite, id_cinema) VALUES (?, ?, ?)";
+        // CORRECTION : nb_places au lieu de capacite
+        String sql = "INSERT INTO salle (numero, nb_places, description, id_cinema) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, obj.getNumero());
             ps.setInt(2, obj.getCapacite());
-            ps.setInt(3, obj.getIdCinema());
-
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            ps.setString(3, obj.getDescription());
+            ps.setInt(4, obj.getIdCinema());
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            // Affichage de l'erreur précise dans la console pour le débogage
-            System.err.println("ERREUR SQL EXCEPTION (create) : " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("ERREUR SQL EXCEPTION (create salle) : " + e.getMessage());
             return false;
         }
     }
@@ -35,24 +32,22 @@ public class SalleDAO extends DAO<Salle> {
             ps.setInt(1, obj.getIdSalle());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERREUR SQL EXCEPTION (delete) : " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean update(Salle obj) {
-        String sql = "UPDATE salle SET numero = ?, capacite = ?, id_cinema = ? WHERE id_salle = ?";
+        // CORRECTION : nb_places au lieu de capacite
+        String sql = "UPDATE salle SET numero = ?, nb_places = ?, description = ?, id_cinema = ? WHERE id_salle = ?";
         try (PreparedStatement ps = this.connect.prepareStatement(sql)) {
             ps.setString(1, obj.getNumero());
             ps.setInt(2, obj.getCapacite());
-            ps.setInt(3, obj.getIdCinema());
-            ps.setInt(4, obj.getIdSalle());
+            ps.setString(3, obj.getDescription());
+            ps.setInt(4, obj.getIdCinema());
+            ps.setInt(5, obj.getIdSalle());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERREUR SQL EXCEPTION (update) : " + e.getMessage());
-            e.printStackTrace();
             return false;
         }
     }
@@ -64,18 +59,11 @@ public class SalleDAO extends DAO<Salle> {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Salle(
-                            rs.getInt("id_salle"),
-                            rs.getString("numero"),
-                            rs.getInt("capacite"),
-                            rs.getInt("id_cinema")
-                    );
+                    // CORRECTION : rs.getInt("nb_places")
+                    return new Salle(rs.getInt("id_salle"), rs.getString("numero"), rs.getInt("nb_places"), rs.getString("description"), rs.getInt("id_cinema"));
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("ERREUR SQL EXCEPTION (find) : " + e.getMessage());
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         return null;
     }
 
@@ -86,19 +74,10 @@ public class SalleDAO extends DAO<Salle> {
         try (PreparedStatement ps = this.connect.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                liste.add(new Salle(
-                        rs.getInt("id_salle"),
-                        rs.getString("numero"),
-                        rs.getInt("capacite"),
-                        rs.getInt("id_cinema")
-                ));
+                // CORRECTION : rs.getInt("nb_places")
+                liste.add(new Salle(rs.getInt("id_salle"), rs.getString("numero"), rs.getInt("nb_places"), rs.getString("description"), rs.getInt("id_cinema")));
             }
-        } catch (SQLException e) {
-            System.err.println("ERREUR SQL EXCEPTION (findAll) : " + e.getMessage());
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         return liste;
-
-
     }
 }
