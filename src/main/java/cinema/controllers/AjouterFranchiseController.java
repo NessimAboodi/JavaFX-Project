@@ -17,7 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,21 +29,17 @@ public class AjouterFranchiseController extends MenuController implements Initia
     @FXML
     private Button bRetour;
     @FXML
-    private ListView<Utilisateur> lvGerantFranchise;
+    private ComboBox<Utilisateur> cbGerantFranchise; // Modifié ici
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         ObservableList<Utilisateur> utilisateurs = getUtilisateurList();
-
-        lvGerantFranchise.setItems(utilisateurs);
+        cbGerantFranchise.setItems(utilisateurs); // Modifié ici
     }
 
     private ObservableList<Utilisateur> getUtilisateurList() {
-
         UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
         List<Utilisateur> utilisateurs = utilisateurDAO.findAll();
-
         ObservableList<Utilisateur> list = FXCollections.observableArrayList(utilisateurs);
         return list;
     }
@@ -62,35 +58,27 @@ public class AjouterFranchiseController extends MenuController implements Initia
             accueilController.setName(nameUti);
             accueilController.setBienvenue();
 
-            // Créer une nouvelle fenêtre (Stage)
             Stage stage = new Stage();
             stage.setTitle("Liste franchises");
             stage.setScene(new Scene(root));
-
-            // Configurer la fenêtre en tant que modal
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Afficher la fenêtre et attendre qu'elle se ferme
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
     public void bEnregistrerClick(ActionEvent event) {
-
         String x = tfNomFranchise.getText();
         String y = tfSiegeSocial.getText();
 
-        Utilisateur gerantSelectionne = lvGerantFranchise.getSelectionModel().getSelectedItem();
+        Utilisateur gerantSelectionne = cbGerantFranchise.getSelectionModel().getSelectedItem(); // Modifié ici
         if (gerantSelectionne == null) {
-            // Aucun gérant sélectionné = stop
             return;
         }
 
-        int z = gerantSelectionne.getIdUtilisateur(); // id vient de la sélection
+        int z = gerantSelectionne.getIdUtilisateur();
         Franchise bloup = new Franchise(0, x, y, z);
 
         FranchiseDAO franchiseDAO = new FranchiseDAO();
@@ -98,9 +86,8 @@ public class AjouterFranchiseController extends MenuController implements Initia
         if (controle) {
             tfNomFranchise.clear();
             tfSiegeSocial.clear();
-            lvGerantFranchise.getSelectionModel().clearSelection();
+            cbGerantFranchise.getSelectionModel().clearSelection(); // Modifié ici
         }
-
     }
 
     @FXML
@@ -109,7 +96,6 @@ public class AjouterFranchiseController extends MenuController implements Initia
             tfNomFranchise.clear();
         if (tfSiegeSocial != null)
             tfSiegeSocial.clear();
-        lvGerantFranchise.getSelectionModel().clearSelection();
+        cbGerantFranchise.getSelectionModel().clearSelection(); // Modifié ici
     }
-
 }
