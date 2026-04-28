@@ -3,9 +3,12 @@ package cinema.controllers;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import cinema.BO.Cinema;
 import cinema.DAO.CinemaDAO;
+import cinema.DAO.SalleDAO;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,10 +29,11 @@ public class ListeCinemaController extends MenuController implements Initializab
     @FXML
     private TableColumn<Cinema, String> tcDenomination;
 
-    // Bien que l'ID soit un entier, on peut laisser le TableColumn en String ou Integer,
-    // JavaFX gérera l'affichage grâce au PropertyValueFactory.
     @FXML
     private TableColumn<Cinema, Integer> tcFranchise;
+
+    @FXML
+    private TableColumn<Cinema, String> tcVp;
 
     @FXML
     private TableColumn<Cinema, Void> tcModif, tcSupp;
@@ -43,14 +47,21 @@ public class ListeCinemaController extends MenuController implements Initializab
         nameUti = Navigation.getParam("nameUti");
 
         tcDenomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-
         // CORRECTION ICI : "idFranchise" correspond exactement à l'attribut dans votre classe Cinema.java
         tcFranchise.setCellValueFactory(new PropertyValueFactory<>("idFranchise"));
 
-        ObservableList<Cinema> data = getCinema();
-        tvCinema.setItems(data);
+        // Colonne "salle" : affiche les salles séparées par des virgules
+        SalleDAO salleDAO = new SalleDAO();
+        tcVp.setCellValueFactory(cellData -> {
+            int idCinema = cellData.getValue().getIdCinema();
+            String salles = salleDAO.findAll().stream()
+                    .filter(s -> s.getIdCinema() == idCinema)
+                    .map(s -> "Salle " + s.getNumero())
+                    .collect(Collectors.joining(", "));
+            return new SimpleStringProperty(salles.isEmpty() ? "Aucune salle" : salles);
+        });
 
-        // Appel des méthodes pour créer les boutons dans la table
+        tvCinema.setItems(getCinema());
         btnModif();
         btnSupp();
     }
@@ -71,17 +82,12 @@ public class ListeCinemaController extends MenuController implements Initializab
     private void btnModif() {
         tcModif.setCellFactory(column -> new TableCell<Cinema, Void>() {
             private final Button btn = new Button("Modifier");
-
             {
-                // Appliquer le style CSS existant si nécessaire
                 btn.getStyleClass().add("action-button");
-
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
-
                     // On sauvegarde l'ID du cinéma cliqué pour le passer à ModifierCinemaController
                     Navigation.setParam("idCinema", cinema.getIdCinema());
-
                     Window currentWindow = btn.getScene().getWindow();
                     Navigation.goTo("/cinema/views/page_modif_cinema.fxml", "nameUti", nameUti, currentWindow);
                 });
@@ -98,21 +104,13 @@ public class ListeCinemaController extends MenuController implements Initializab
     private void btnSupp() {
         tcSupp.setCellFactory(col -> new TableCell<Cinema, Void>() {
             private final Button btn = new Button("Supprimer");
-
             {
                 btn.getStyleClass().add("action-button");
-
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
-
                     CinemaDAO cinemaDAO = new CinemaDAO();
-                    boolean estSupprime = cinemaDAO.delete(cinema);
-
-                    if (estSupprime) {
-                        tvCinema.getItems().remove(cinema); // Retire la ligne visuellement de la TableView
-                        System.out.println("Cinéma supprimé avec succès.");
-                    } else {
-                        System.out.println("Erreur lors de la suppression du cinéma.");
+                    if (cinemaDAO.delete(cinema)) {
+                        tvCinema.getItems().remove(cinema);
                     }
                 });
             }
