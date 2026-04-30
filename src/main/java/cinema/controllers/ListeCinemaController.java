@@ -43,11 +43,9 @@ public class ListeCinemaController extends MenuController implements Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Récupérer le nom de l'utilisateur pour le menu
         nameUti = Navigation.getParam("nameUti");
 
         tcDenomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-        // CORRECTION ICI : "idFranchise" correspond exactement à l'attribut dans votre classe Cinema.java
         tcFranchise.setCellValueFactory(new PropertyValueFactory<>("idFranchise"));
 
         // Colonne "salle" : affiche les salles séparées par des virgules
@@ -75,7 +73,6 @@ public class ListeCinemaController extends MenuController implements Initializab
     @FXML
     public void bRetourClick(ActionEvent actionEvent) {
         Window currentWindow = bRetour.getScene().getWindow();
-        // Utilisation propre de Navigation vers l'accueil
         Navigation.goTo("/cinema/views/page_accueil.fxml", "nameUti", nameUti, currentWindow);
     }
 
@@ -86,7 +83,6 @@ public class ListeCinemaController extends MenuController implements Initializab
                 btn.getStyleClass().add("action-button");
                 btn.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
-                    // On sauvegarde l'ID du cinéma cliqué pour le passer à ModifierCinemaController
                     Navigation.setParam("idCinema", cinema.getIdCinema());
                     Window currentWindow = btn.getScene().getWindow();
                     Navigation.goTo("/cinema/views/page_modif_cinema.fxml", "nameUti", nameUti, currentWindow);
