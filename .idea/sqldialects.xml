@@ -3,5 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/sql/create_databse_appli_cinema.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/sql/insert_table_appli_cinema.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/sql/log.sql" dialect="GenericSQL" />
   </component>
 </project>
