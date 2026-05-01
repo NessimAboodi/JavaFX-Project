@@ -31,7 +31,7 @@ public class ListeSalleController extends MenuController implements Initializabl
     @FXML private TableColumn<Salle, String> tcNumero;
     @FXML private TableColumn<Salle, Integer> tcCapacite;
 
-    // NOUVELLES COLONNES : String au lieu de Integer pour afficher du texte !
+    // NOUVELLES COLONNES : String au lieu de Integer pour afficher du texte
     @FXML private TableColumn<Salle, String> tcDescription;
     @FXML private TableColumn<Salle, String> tcCinema;
 
