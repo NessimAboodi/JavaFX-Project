@@ -87,7 +87,7 @@
             </children>
         </VBox>
 
-      
+
         <TableView fx:id="tvCinema" layoutY="50.0" prefHeight="292.0" prefWidth="804.0">
             <columns>
                 <TableColumn fx:id="tcDenomination" prefWidth="200.0" text="Dénomination" />
